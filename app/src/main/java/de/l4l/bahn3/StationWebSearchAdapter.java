@@ -106,16 +106,16 @@ public class StationWebSearchAdapter extends ArrayAdapter<Station> implements Fi
                     int total = jsResult.optInt("total", 0);
                     JSONArray records = jsResult.optJSONArray("records");
                     if (records != null)
-                    for (int i = 0; i < total; i++) {
-                        JSONObject rec = records.optJSONObject(i);
-                        if (rec == null)
-                            continue;
-                        stations.add(Station.builder()
-                                .name(rec.optString("Name ohne Ort", "(null)"))
-                                .description(rec.optString("Ort", "(null)"))
-                                .build()
-                        );
-                    }
+                        for (int i = 0; i < total; i++) {
+                            JSONObject rec = records.optJSONObject(i);
+                            if (rec == null)
+                                continue;
+                            stations.add(Station.builder()
+                                    .name(rec.optString("Name ohne Ort", "(null)"))
+                                    .description(rec.optString("Ort", "(null)"))
+                                    .build()
+                            );
+                        }
                 }
             }
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
