@@ -38,7 +38,6 @@ import de.l4l.bahn3.dto.Station;
  * http://makovkastar.github.io/blog/2014/04/12/android-autocompletetextview-with-suggestions-from-a-web-service/
  * https://www.openvrr.de/en/api/3/action/help_show?name=datastore_search
  * https://developer.android.com/training/volley/request.html
- * https://www.openvrr.de/en/api/3/action/datastore_search?resource_id=b1c348f0-8730-48f2-8835-080bbf6aa469&q=graf
  */
 public class StationWebSearchAdapter extends ArrayAdapter<Station> implements Filterable {
     private static final String URL = "https://www.openvrr.de/en/api/3/action/datastore_search?resource_id=b1c348f0-8730-48f2-8835-080bbf6aa469&q=";

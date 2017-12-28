@@ -16,20 +16,11 @@ public class ScrollingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         AutoCompleteTextView fromField = findViewById(R.id.fromField);
         fromField.setAdapter(new StationWebSearchAdapter(this, R.layout.activity_scrolling));
+        AutoCompleteTextView toField = findViewById(R.id.toField);
+        toField.setAdapter(new StationWebSearchAdapter(this, R.layout.activity_scrolling));
     }
 
     @Override
