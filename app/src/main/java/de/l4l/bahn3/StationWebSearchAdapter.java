@@ -3,6 +3,7 @@ package de.l4l.bahn3;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,7 @@ import de.l4l.bahn3.dto.Station;
 public class StationWebSearchAdapter extends ArrayAdapter<Station> implements Filterable {
     private static final String URL = "https://www.openvrr.de/en/api/3/action/datastore_search?resource_id=b1c348f0-8730-48f2-8835-080bbf6aa469&q=";
 
-    private List<Station> data = new ArrayList<>();
+    private List<Station> stations = new ArrayList<>();
     private Context context;
     private final RequestQueue queue;
 
@@ -58,14 +59,14 @@ public class StationWebSearchAdapter extends ArrayAdapter<Station> implements Fi
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 FilterResults results = new FilterResults();
-                data.clear();
+                stations.clear();
                 results.count = 0;
                 if (charSequence != null) {
-                    data.addAll(requestPlaces(charSequence));
-                    results.count = data.size();
+                    stations.addAll(requestPlaces(charSequence));
+                    results.count = stations.size();
                 }
 
-                results.values = data;
+                results.values = stations;
                 return results;
             }
 
@@ -98,7 +99,7 @@ public class StationWebSearchAdapter extends ArrayAdapter<Station> implements Fi
 
         List<Station> stations = new LinkedList<>();
         try {
-            JSONObject response = future.get(1, TimeUnit.SECONDS);
+            JSONObject response = future.get(10, TimeUnit.SECONDS);
             if (response.optBoolean("success")) {
                 JSONObject jsResult = response.optJSONObject("result");
                 if (jsResult != null) {
@@ -118,7 +119,7 @@ public class StationWebSearchAdapter extends ArrayAdapter<Station> implements Fi
                 }
             }
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            e.printStackTrace();
+            Log.e("GET_Places", "Failed retrieving", e);
         }
 
         return stations;
@@ -126,12 +127,12 @@ public class StationWebSearchAdapter extends ArrayAdapter<Station> implements Fi
 
     @Override
     public Station getItem(int i) {
-        return data.get(i);
+        return stations.get(i);
     }
 
     @Override
     public int getCount() {
-        return data.size();
+        return stations.size();
     }
 
     @Override
@@ -142,12 +143,13 @@ public class StationWebSearchAdapter extends ArrayAdapter<Station> implements Fi
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.simple_dropdown_item_2line, parent, false);
         }
-        ((TextView) convertView.findViewById(R.id.text1)).setText(getItem(position).getName());
-        ((TextView) convertView.findViewById(R.id.text2)).setText(getItem(position).getDescription());
+        Station station = getItem(position);
+        ((TextView) convertView.findViewById(R.id.text1)).setText(station.getName());
+        ((TextView) convertView.findViewById(R.id.text1)).setTag(station);
+        ((TextView) convertView.findViewById(R.id.text2)).setText(station.getDescription());
         return convertView;
     }
 }

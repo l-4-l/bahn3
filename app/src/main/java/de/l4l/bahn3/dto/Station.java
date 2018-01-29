@@ -11,4 +11,9 @@ import lombok.Getter;
 public class Station {
     private String name;
     private String description;
+
+    @Override
+    public String toString() {
+        return name + " (" + description + ")";
+    }
 }
